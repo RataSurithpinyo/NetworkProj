@@ -8,7 +8,7 @@ function Home(){
     return (
         <>
             <section className='heading'>
-                <h1>Server-Client Chat System</h1>
+                <h1>Client-Server Chat System</h1>
                 <p>An easy way to start chatting</p>
             </section>
             <div>

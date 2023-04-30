@@ -1,34 +1,24 @@
-import {useState, useEffect} from 'react'
-import { useNavigate } from 'react-router-dom';
-import {toast} from 'react-toastify'
+import {useState} from 'react'
+//import { useNavigate } from 'react-router-dom';
+//import {toast} from 'react-toastify'
 import {FaUser} from 'react-icons/fa'
-import { useSelector,useDispatch } from 'react-redux';
-import {register,reset} from '../features/auth/authSlice'
+//import { useSelector,useDispatch } from 'react-redux';
+//import { reset } from '../features/auth/authSlice'
+const register_path = "http://localhost:5000/api/auth/register";
 
 function Register(){
     const [formData,setFormData]=useState({
         name: '',
+        nickname: '',
         email: '',
-        password: '',
-        password2: ''
+        password: ''
     });
-    const {name,email,password,password2}=formData;
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
-    const {user,isLoading,isError,isSuccess,message} = useSelector((state)=>{
-        return state.auth
-    })
-    useEffect(()=>{
-        if(isError){
-            console.log("error")
-            toast.error(message)
-        }
-        if(isSuccess||user){
-            console.log("success")
-            navigate('/')
-        }
-        dispatch(reset())
-    },[isError,isSuccess,user,message,navigate,dispatch])
+    const {name,nickname,email,password}=formData;
+    // const dispatch = useDispatch()
+    // const navigate = useNavigate()
+    // const {user,isError,isSuccess,message} = useSelector((state)=>{
+    //     return state.auth
+    // })
     
     const onChange = (e) =>{
         setFormData((prevState)=>({
@@ -36,17 +26,38 @@ function Register(){
             [e.target.name]: e.target.value
         }));
     }
-    const onSubmit =(e) => {
+    
+    const onSubmit = async (e) => {
         e.preventDefault()
-        if(password!==password2){
-            toast.error('Passwords do not match')
-        } else {
-            const userData = {
-                name, email, password
-            }
-            dispatch(register(userData))
+        //console.log('aftersubmit')
+        const data = {
+            name: formData.name,
+            nickname: formData.nickname,
+            email: formData.email,
+            password: formData.password,
+        };
+        
+        const response = await fetch(register_path, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+    
+        const result = await response.json()
+        if(!response.ok){
+            console.log(result.error);
+            alert(result.error);
         }
-    }   
+        else{
+            localStorage.setItem('user',JSON.stringify(result))
+            alert("Register completed");
+            window.location.href="/";
+        }
+    }
+    
+
     return(
     <>  
         <section className="heading">
@@ -58,28 +69,24 @@ function Register(){
                 <div className="form-group">
                     <input type="text" className="form-control"
                     id="name" name="name" value={name} onChange={onChange}
-                    placeholder="Enter Your name" required/>
+                    placeholder="Enter Your Name" required/>
+                </div>
+                <div className="form-group">
+                    <input type="text" className="form-control"
+                    id="nickname" name="nickname" value={nickname} onChange={onChange}
+                    placeholder="Enter Your Nickname" required/>
                 </div>
                 <div className="form-group">
                     <input type="email" className="form-control"
                     id="email" name="email" value={email} onChange={onChange}
-                    placeholder="Enter Your email" required/>
+                    placeholder="Enter Your Email" required/>
                 </div>
                 <div className="form-group">
                 <input type="password" className="form-control"
                     id="password" name="password" value={password} onChange={onChange}
-                    placeholder="Enter Your password" required/>
+                    placeholder="Enter Your Password" required/>
                 </div>
-                <div className="form-group">
-                <input type="password" className="form-control"
-                    id="password2" name="password2" value={password2} onChange={onChange}
-                    placeholder="Confirm Your password" required/>
-                </div>
-                {/* <div className="form-group">
-                <input type="text" className="form-control"
-                    id="role" name="role" value={role} onChange={onChange}
-                    placeholder="Enter Your role" required/>
-                </div> */}
+
                 <div className="form-group">
                     <button className='btn btn-block'>Submit</button>
                 </div>
