@@ -1,8 +1,16 @@
 
 const express = require('express');
+const connectDB = require('./config/db');
+const dotenv = require('dotenv');
 const cors = require('cors');
-const mongoose = require('mongoose');
-const socketio = require('socket.io');
+const cookieParser = require('cookie-parser');
+//const socketio = require('socket.io');
+
+//Load env vars
+dotenv.config({path:'./config/config.env'});
+
+//Connect to database
+connectDB();
 
 const app = express();
 // const server = app.listen(process.env.PORT || 4000, () => {
@@ -13,12 +21,14 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
-// const authRoutes = require('./routes/auth');
+//Mount routers
+ const authRoutes = require('./routes/auth');
 // const groupRoutes = require('./routes/group');
 // const messageRoutes = require('./routes/message');
 
-// app.use('/api/auth', authRoutes);
+app.use('/api/auth', authRoutes);
 // app.use('/api/group', groupRoutes);
 // app.use('/api/message', messageRoutes);
 
@@ -32,15 +42,15 @@ app.use(express.json());
 // });
 
 
-const PORT = process.env.PORT || 4000;
-mongoose.set("strictQuery", false);
-mongoose
-    .connect("mongodb+srv://network:networkpassword@networkproject.ppa2jja.mongodb.net/test")
-    .then(() => {
-    // listen for requests
-        const server = app.listen(PORT, () => {
-        console.log("connected to db & listening on port", PORT);
-    });
+const PORT = process.env.PORT || 5000;
+const server = app.listen(PORT, console.log('Server running in ', process.env.NODE_ENV, 'mode on port ', PORT));
+
+//Handle unhandled promise rejections
+process.on('unhandledRejection', (err, promise) => {
+    console.log(`Error: ${err.message}`);
+    //Close server & exit process
+    server.close(() => process.exit(1));
+});
         // const io = require("socket.io")(server, {
         //     pingTimeout: 60000,
         //     cors: {
@@ -56,4 +66,3 @@ mongoose
         //         console.log(`Socket disconnected: ${socket.id}`);
         //     });
         // });
-    })
