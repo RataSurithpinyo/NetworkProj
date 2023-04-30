@@ -2,7 +2,7 @@ import {useState} from 'react'
 import {FaSignInAlt} from 'react-icons/fa'
 //import { useSelector, useDispatch } from 'react-redux'
 //import { useNavigate } from 'react-router-dom'
-const login_path = "http://localhost:5000/api/auth/login";
+const login_path = "http://localhost:4000/api/auth/login";
 
 function Login(){
     const [formData,setFormData]=useState({
