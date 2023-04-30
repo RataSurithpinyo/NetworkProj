@@ -42,7 +42,6 @@ app.use('/api/auth', authRoutes);
 //     res.status(500).send({ message: 'Internal server error' });
 // });
 
-
 const PORT = process.env.PORT || 4000;
 const server = http.createServer(app);
 // Add this
