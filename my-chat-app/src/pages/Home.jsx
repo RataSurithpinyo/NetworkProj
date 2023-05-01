@@ -13,7 +13,7 @@ function Home(){
             </section>
             <div>
             {user?(
-                    <Link to='/new-ticket' className='btn btn-reverse btn-block'>
+                    <Link to='/chat' className='btn btn-reverse btn-block'>
                     <FaRocketchat/>Start Chatting
                     </Link>
                 ):(
