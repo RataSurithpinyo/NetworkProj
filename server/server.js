@@ -1,5 +1,5 @@
 const express = require('express');
-const connectDB = require('./config/db');
+const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -12,9 +12,6 @@ const leaveRoom = require('./utils/leave-room');
 //Load env vars
 dotenv.config({path:'./config/config.env'});
 
-//Connect to database
-connectDB();
-
 const app = express();
 
 app.use(cors());
@@ -24,11 +21,13 @@ app.use(cookieParser());
 //Mount routers
 const authRoutes = require('./routes/auth');
 // const groupRoutes = require('./routes/group');
-// const messageRoutes = require('./routes/message');
+const chatRoutes = require("./routes/chat");
+const messageRoutes = require('./routes/message');
 
 app.use('/api/auth', authRoutes);
 // app.use('/api/group', groupRoutes);
-// app.use('/api/message', messageRoutes);
+app.use("/api/chat", chatRoutes);
+app.use('/api/message', messageRoutes);
 
 // app.use((req, res) => {
 //     res.status(404).send({ message: 'Not found' });
@@ -40,12 +39,20 @@ app.use('/api/auth', authRoutes);
 // });
 
 const PORT = process.env.PORT || 4000;
-const server = http.createServer(app);
-
-const io = new Server(server, {
-  cors: {
-      origin: "http://localhost:3000",
-      methods: ['GET', 'POST'],
+mongoose.set('strictQuery', false);
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    // listen for requests
+    const server = app.listen(PORT, () => {
+      console.log("connected to db & listening on port", PORT);
+    });
+    const io = require("socket.io")(server, {
+      pingTimeout: 60000,
+      cors: {
+        //origin: "http://localhost:3000",
+        //origin : "https://sec33-group3-muse-connect-5kdwszn2t-pacharawin.vercel.app"
+        origin : '*'
   },
 });
 
@@ -128,12 +135,6 @@ io.on('connection', (socket) => {
     }
   });
 });
-
-server.listen(PORT, console.log('Server running in', process.env.NODE_ENV, 'mode on port', PORT));
-
-// Handle unhandled promise rejections
-process.on('unhandledRejection', (err, promise) => {
-    console.log(`Error: ${err.message}`);
-    //Close server & exit process
-    server.close(() => process.exit(1));
+}).catch((error) => {
+  console.log(error);
 });
