@@ -1,7 +1,12 @@
 import {Link} from 'react-router-dom'
 import {FaRocketchat} from 'react-icons/fa'
 import { useSelector } from 'react-redux'
-
+import { io } from "socket.io-client";
+const socket = io("http://localhost:4000");
+socket.emit('join_room', {
+    username: "prim",
+    room: "123",
+});
 
 function Home(){
     const {user} = useSelector((state)=>state.auth);

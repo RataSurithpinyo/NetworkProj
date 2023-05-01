@@ -5,8 +5,8 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const http = require('http');
 const { Server } = require('socket.io');
-const harperSaveMessage = require('./services/harper-save-message');
-const harperGetMessages = require('./services/harper-get-messages');
+//const harperSaveMessage = require('./services/harper-save-message');
+//const harperGetMessages = require('./services/harper-get-messages');
 const leaveRoom = require('./utils/leave-room');
 
 //Load env vars
@@ -65,16 +65,15 @@ io.on('connection', (socket) => {
   console.log(`User connected ${socket.id}`);
 
   // Add a user to a room
-  socket.on('join_room', (data) => {
-    const { username, room } = data; // Data sent from client when join_room event emitted
-    socket.join(room); // Join the user to a socket room
-  
-    let __createdtime__ = Date.now(); // Current timestamp
+  socket.on('join_room', ({ username, room }) => {
+    socket.join(room);
+    console.log({ username, room });
+    let __createdtime__ = Date.now();
     // Send message to all users currently in the room, apart from the user that just joined
     socket.to(room).emit('receive_message', {
       message: `${username} has joined the chat room`,
       username: CHAT_BOT,
-      __cratedtime__,
+      __createdtime__,
     });
 
     // Send welcome msg to user that just joined chat only
@@ -92,20 +91,20 @@ io.on('connection', (socket) => {
     socket.emit('chatroom_users', chatRoomUsers);
 
     // Get last 100 messages sent in the chat room
-    harperGetMessages(room)
-      .then((last100Messages) => {
-        // console.log('latest messages', last100Messages);
-        socket.emit('last_100_messages', last100Messages);
-      })
-      .catch((err) => console.log(err));
+  //   harperGetMessages(room)
+  //     .then((last100Messages) => {
+  //       // console.log('latest messages', last100Messages);
+  //       socket.emit('last_100_messages', last100Messages);
+  //     })
+  //     .catch((err) => console.log(err));
   });
 
   socket.on('send_message', (data) => {
     const { message, username, room, __createdtime__ } = data;
     io.in(room).emit('receive_message', data); // Send to all users in room, including sender
-    harperSaveMessage(message, username, room, __createdtime__) // Save message in db
-      .then((response) => console.log(response))
-      .catch((err) => console.log(err));
+    // harperSaveMessage(message, username, room, __createdtime__) // Save message in db
+    //   .then((response) => console.log(response))
+    //   .catch((err) => console.log(err));
   });
 
   socket.on('leave_room', (data) => {
