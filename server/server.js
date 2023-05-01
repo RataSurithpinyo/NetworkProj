@@ -5,8 +5,8 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const http = require('http');
 const { Server } = require('socket.io');
-//const harperSaveMessage = require('./services/harper-save-message');
-//const harperGetMessages = require('./services/harper-get-messages');
+// //const harperSaveMessage = require('./services/harper-save-message');
+// //const harperGetMessages = require('./services/harper-get-messages');
 const leaveRoom = require('./utils/leave-room');
 
 //Load env vars
@@ -20,14 +20,10 @@ app.use(cookieParser());
 
 //Mount routers
 const authRoutes = require('./routes/auth');
-// const groupRoutes = require('./routes/group');
 const chatRoutes = require("./routes/chat");
-const messageRoutes = require('./routes/message');
 
 app.use('/api/auth', authRoutes);
-// app.use('/api/group', groupRoutes);
-app.use("/api/chat", chatRoutes);
-app.use('/api/message', messageRoutes);
+app.use('/api/chat', chatRoutes);
 
 // app.use((req, res) => {
 //     res.status(404).send({ message: 'Not found' });
@@ -50,11 +46,9 @@ mongoose
     const io = require("socket.io")(server, {
       pingTimeout: 60000,
       cors: {
-        origin: "http://localhost:3000"
-        //origin : "https://sec33-group3-muse-connect-5kdwszn2t-pacharawin.vercel.app"
-        //origin : '*'
-  },
-});
+        origin: "http://localhost:3000",
+      },
+    });
 
 const CHAT_BOT = 'ChatBot';
 let chatRoom = ''; // E.g. javascript, node,...
@@ -91,12 +85,12 @@ io.on('connection', (socket) => {
     socket.emit('chatroom_users', chatRoomUsers);
 
     // Get last 100 messages sent in the chat room
-  //   harperGetMessages(room)
-  //     .then((last100Messages) => {
-  //       // console.log('latest messages', last100Messages);
-  //       socket.emit('last_100_messages', last100Messages);
-  //     })
-  //     .catch((err) => console.log(err));
+    // harperGetMessages(room)
+    //   .then((last100Messages) => {
+    //     // console.log('latest messages', last100Messages);
+    //     socket.emit('last_100_messages', last100Messages);
+    //   })
+    //   .catch((err) => console.log(err));
   });
 
   socket.on('send_message', (data) => {

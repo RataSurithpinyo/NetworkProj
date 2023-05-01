@@ -2,23 +2,21 @@ const mongoose = require("mongoose");
 
 const chatSchema = mongoose.Schema(
   {
-    organizer: {
+    roomId: {
+      type: String,
+      required: true,
+    },
+    sender: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      require: true,
     },
-    musician: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      require: true,
+    message: {
+      type: String,
+      required: true,
     },
-    latestMessage: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Message",
-    },
-    latestMessageEvent: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Message",
+    createdAt: {
+      type: Date,
+      default: Date.now,
     },
   },
   {
