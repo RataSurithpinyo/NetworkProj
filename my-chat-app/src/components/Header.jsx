@@ -14,6 +14,7 @@ function Header(){
     const logOut = () => {
         localStorage.removeItem("user");
         setUser(null);
+        window.location.href="/";
     };
 
     console.log(user==null)
