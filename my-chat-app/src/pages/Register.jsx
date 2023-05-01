@@ -4,7 +4,7 @@ import {useState} from 'react'
 import {FaUser} from 'react-icons/fa'
 //import { useSelector,useDispatch } from 'react-redux';
 //import { reset } from '../features/auth/authSlice'
-const register_path = "http://localhost:5000/api/auth/register";
+const register_path = "http://localhost:4000/api/auth/register";
 
 function Register(){
     const [formData,setFormData]=useState({
