@@ -1,0 +1,19 @@
+{
+  "name": "networkproj",
+  "version": "1.0.0",
+  "description": "Matt Yongpiyakul\r Rata Surithpinyo\r Wisaroot Jongsanguandee\r Saran Sirichote",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RataSurithpinyo/NetworkProj.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RataSurithpinyo/NetworkProj/issues"
+  },
+  "homepage": "https://github.com/RataSurithpinyo/NetworkProj#readme"
+}
