@@ -1,11 +1,13 @@
 import {useState} from 'react'
 import {FaSignInAlt} from 'react-icons/fa'
 import { useEffect } from 'react';
+import {useNavigate} from "react-router-dom"
 //import { useSelector, useDispatch } from 'react-redux'
 //import { useNavigate } from 'react-router-dom'
 const login_path = "http://localhost:4000/api/auth/login";
 
 const Login = ({socket}) =>{
+    const navigate = useNavigate()
     //const [toServer,setToServer] = useState("")
     const [formData,setFormData]=useState({
         name: '',
@@ -55,7 +57,8 @@ const Login = ({socket}) =>{
             //socket.emit("newUser", {email, socketID: socket.id})
             console.log("success emit after login")
             alert("Login completed");
-            window.location.href="/";
+            //window.location.href="/";
+            navigate("/")
         }
     }
 

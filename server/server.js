@@ -72,9 +72,9 @@ socketIO.on('connection', (socket) => {
     users.push(data)
     //console.log(users)
     socketIO.emit("newUserResponse", users)
+    console.log(users)
   })
-  console.log(users)
-  
+
   socket.on('disconnect', () => {
     console.log('🔥: A user disconnected');
     users = users.filter(user => user.socketID !== socket.id)

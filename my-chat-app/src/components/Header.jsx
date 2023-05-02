@@ -9,7 +9,7 @@ function Header(){
     const [user, setUser] = useState(null);
     useEffect(() => {
         setUser(localStorage.getItem("name"));
-    }, []);
+    }, [])
 
     const logOut = () => {
         localStorage.removeItem("name");
