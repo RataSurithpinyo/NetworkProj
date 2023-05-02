@@ -51,7 +51,8 @@ function Register(){
             alert(result.error);
         }
         else{
-            localStorage.setItem('user',JSON.stringify(result))
+            const toserver = data.name
+            localStorage.setItem("name", toserver)
             alert("Register completed");
             window.location.href="/";
         }

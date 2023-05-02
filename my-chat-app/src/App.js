@@ -5,8 +5,10 @@ import Header from './components/Header'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
-import Chatdemo from './pages/Chat'
+import Chat from './pages/Chat'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { io } from "socket.io-client";
+const socket = io("http://localhost:4000");
 
 function App() {
 return (
@@ -15,10 +17,10 @@ return (
   <div className="container">
     <Header />
     <Routes>
-      <Route path='/' element={<Home/>} />
-      <Route path='/login' element={<Login/>} />
+      <Route path='/' element={<Home socket={socket}/>}></Route>
+      <Route path='/login' element={<Login socket={socket}/>}></Route>
       <Route path='/register' element={<Register/>} />
-      <Route path='/chat' element={<Chatdemo/>} />
+      <Route path="/chat" element={<Chat socket={socket}/>}></Route>
     </Routes>
   </div>
   </Router>

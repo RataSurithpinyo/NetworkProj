@@ -8,11 +8,11 @@ function Header(){
     //const navigate = useNavigate()
     const [user, setUser] = useState(null);
     useEffect(() => {
-        setUser(localStorage.getItem("user"));
+        setUser(localStorage.getItem("name"));
     }, []);
 
     const logOut = () => {
-        localStorage.removeItem("user");
+        localStorage.removeItem("name");
         setUser(null);
         window.location.href="/";
     };

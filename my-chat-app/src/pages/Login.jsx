@@ -1,15 +1,17 @@
 import {useState} from 'react'
 import {FaSignInAlt} from 'react-icons/fa'
+import { useEffect } from 'react';
 //import { useSelector, useDispatch } from 'react-redux'
 //import { useNavigate } from 'react-router-dom'
 const login_path = "http://localhost:4000/api/auth/login";
 
-function Login(){
+const Login = ({socket}) =>{
+    //const [toServer,setToServer] = useState("")
     const [formData,setFormData]=useState({
-        email: '',
+        name: '',
         password: ''
     });
-    const {email,password}=formData;
+    const {name,password}=formData;
     // const dispatch = useDispatch()
     // const navigate = useNavigate()
     // const {user,isError,isSuccess,message} = useSelector((state)=>{
@@ -27,7 +29,7 @@ function Login(){
         e.preventDefault()
         //console.log('aftersubmit')
         const data = {
-            email: formData.email,
+            name: formData.name,
             password: formData.password
         };
         
@@ -45,7 +47,13 @@ function Login(){
             alert(result.error);
         }
         else{
-            localStorage.setItem('user',JSON.stringify(result))
+            let toServer = formData.name
+            console.log("toserver: "+ toServer)
+            localStorage.setItem("name", toServer)
+            socket.emit("newUser", {toServer, socketID: socket.id})
+            //localStorage.setItem('user',JSON.stringify(result))
+            //socket.emit("newUser", {email, socketID: socket.id})
+            console.log("success emit after login")
             alert("Login completed");
             window.location.href="/";
         }
@@ -60,9 +68,9 @@ function Login(){
         <section className="form">
             <form onSubmit={onSubmit}>
                 <div className="form-group">
-                    <input type="email" className="form-control"
-                    id="email" name="email" value={email} onChange={onChange}
-                    placeholder="Enter Your email" required/>
+                    <input type="text" className="form-control"
+                    id="name" name="name" value={name} onChange={onChange}
+                    placeholder="Enter Your Name" required/>
                 </div>
                 <div className="form-group">
                 <input type="password" className="form-control"

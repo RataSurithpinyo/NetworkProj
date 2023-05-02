@@ -1,15 +1,12 @@
 import {Link} from 'react-router-dom'
 import {FaRocketchat} from 'react-icons/fa'
 import { useSelector } from 'react-redux'
-import { io } from "socket.io-client";
-const socket = io("http://localhost:4000");
-socket.emit('join_room', {
-    username: "prim",
-    room: "123",
-});
 
-function Home(){
-    const {user} = useSelector((state)=>state.auth);
+const Home = ({socket}) => {
+    const user = localStorage.getItem('name')
+    console.log(user==null)
+    //const {user} = useSelector((state)=>state.auth);
+    //socket.emit("newUser", {userName, socketID: socket.id})
     return (
         <>
             <section className='heading'>
@@ -17,7 +14,7 @@ function Home(){
                 <p>An easy way to start chatting</p>
             </section>
             <div>
-            {user?(
+            {user!=null?(
                     <Link to='/chat' className='btn btn-reverse btn-block'>
                     <FaRocketchat/>Start Chatting
                     </Link>
