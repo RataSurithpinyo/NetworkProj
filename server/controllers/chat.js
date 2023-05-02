@@ -65,7 +65,7 @@ const accessChat = async (req, res) => {
 
 const getChat = async (req, res) => {
   try {
-    const chat = await Chat.findById(req.params.id).populate("organizer");
+    const chat = await Chat.findById(req.params.id).populate("sender");
 
     res.status(200).json(chat);
   } catch (error) {
@@ -84,7 +84,7 @@ const deleteChat = async (req, res) => {
       throw Error("Invalid user_id");
     }
     const chat = await Chat.findById(id);
-    if (String(chat.organizer) != user_id && String(chat.musician) != user_id) {
+    if (String(chat.sender) != user_id) {
       throw Error("Authentication failed");
     }
     const chat_del = await Chat.findByIdAndDelete(id);
@@ -94,32 +94,31 @@ const deleteChat = async (req, res) => {
   }
 };
 
-const updateChat = async (req, res) => {
-  const id = req.params.id;
-  const user_id = req.user._id;
-  try {
-    if (!mongoose.isValidObjectId(id)) {
-      throw Error("Invalid Id");
-    }
-    if (!mongoose.isValidObjectId(user_id)) {
-      throw Error("Invalid user_id");
-    }
-    const chat_check = await Chat.findById(id);
-    if (
-      String(chat_check.organizer) != user_id &&
-      String(chat_check.musician) != user_id
-    ) {
-      throw Error("Authentication failed");
-    }
-    delete req.body.user_id;
-    const chat = await Chat.findByIdAndUpdate(id, req.body, {
-      returnDocument: "after",
-    });
-    res.status(200).json(chat);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
+// const updateChat = async (req, res) => {
+//   const id = req.params.id;
+//   const user_id = req.user._id;
+//   try {
+//     if (!mongoose.isValidObjectId(id)) {
+//       throw Error("Invalid Id");
+//     }
+//     if (!mongoose.isValidObjectId(user_id)) {
+//       throw Error("Invalid user_id");
+//     }
+//     const chat_check = await Chat.findById(id);
+//     if (
+//       String(chat_check.sender) != user_id
+//     ) {
+//       throw Error("Authentication failed");
+//     }
+//     delete req.body.user_id;
+//     const chat = await Chat.findByIdAndUpdate(id, req.body, {
+//       returnDocument: "after",
+//     });
+//     res.status(200).json(chat);
+//   } catch (error) {
+//     res.status(400).json({ error: error.message });
+//   }
+// };
 
 module.exports = {
   fetchChats,

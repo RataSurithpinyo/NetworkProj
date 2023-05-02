@@ -26,6 +26,6 @@ router.get("/:id", getChat);
 router.delete("/:id", deleteChat);
 
 // update chat
-router.put("/:id", updateChat);
+//router.put("/:id", updateChat);
 
 module.exports = router;

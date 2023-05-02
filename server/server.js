@@ -20,10 +20,12 @@ app.use(cookieParser());
 
 //Mount routers
 const authRoutes = require('./routes/auth');
-const chatRoutes = require("./routes/chat");
+// const chatRoutes = require("./routes/chat");
+const roomRoutes = require('./routes/room');
 
 app.use('/api/auth', authRoutes);
-app.use('/api/chat', chatRoutes);
+// app.use('/api/chat', chatRoutes);
+app.use('/api/room', roomRoutes);
 
 // app.use((req, res) => {
 //     res.status(404).send({ message: 'Not found' });

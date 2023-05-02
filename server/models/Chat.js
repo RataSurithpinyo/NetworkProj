@@ -2,13 +2,13 @@ const mongoose = require("mongoose");
 
 const chatSchema = mongoose.Schema(
   {
-    roomId: {
-      type: String,
-      required: true,
-    },
     sender: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+    },
+    receiver:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
     },
     message: {
       type: String,
@@ -29,20 +29,20 @@ const chatSchema = mongoose.Schema(
 chatSchema.statics.findChatByUser = async function (user_id_1, user_id_2) {
   let chat = null;
   chat = await this.findOne({
-    organizer: user_id_1,
-    musician: user_id_2,
+    sender: user_id_1,
+    receiver: user_id_2,
   });
   if (!chat) {
     chat = await this.findOne({
-      organizer: user_id_2,
-      musician: user_id_1,
+      sender: user_id_2,
+      receiver: user_id_1,
     });
   }
   return chat;
 };
 
 chatSchema.methods.isUserIn = function (userId) {
-  return this.musician.equals(userId) || this.organizer.equals(userId);
+  return this.sender.equals(userId) || this.receiver.equals(userId);
 };
 
 module.exports = mongoose.model("Chat", chatSchema);
